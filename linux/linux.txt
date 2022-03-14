@@ -1,0 +1,6 @@
+1. ls -d */
+2. cat 1.txt 2.txt 3.txt> all.txt
+3. grep . error.txt
+4. find . -name "*.jpg"
+5. :> filename.txt
+6. find . -size +4000 -print

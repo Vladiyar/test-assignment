@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+//1
+    const deepEqual = (obj1, obj2) => {
+        if (typeof(obj1) && typeof(obj2) === "object" ) {
+            const arr1 = Object.getOwnPropertyNames(obj1);
+            const arr2 = Object.getOwnPropertyNames(obj2);
+
+            if (arr1.length !== arr2.length) {
+                return false;
+            }
+
+            for (let i = 0; i < arr1.length; i++) {
+                const prop = arr1[i];
+
+                if (obj1[prop] !== obj2[prop]) {
+                return false;
+                }
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+  
+        }
+
+//2
+        function chunkArray(array, chunk){
+            var nextIndex = 0;
+            return {
+                next: function(){
+                    return nextIndex < array.length ?
+                        {value: array.slice(nextIndex, nextIndex+=chunk), done: false} :
+                        {done: true};
+                }
+            }
+        }
+        const iterator = chunkArray([1,2,3,4,5,6,7,8], 3);
+
+
+//3
+function bulkRun(array) {
+            let promises = array.map(e => e[0](...e[1]));
+            return Promise.all(promises);
+        }
+        
+        const f1 = () => 1;
+        const f2 = (a) => a * a;
+        const f3 = (...args) => new Promise(resolve => { setTimeout(resolve, 1000, args) });
+        
+        bulkRun(
+            [
+                [f1, []],
+                [f2, [16]],
+                [f3, [3, 4]]
+            ]
+        ).then(console.log);
+
+
+//4
+        const matrix = arr => {
+                    let smallestNumber = arr[0][0];
+                    for (let j = 0; j < arr.length; j++) {            
+                        for (let i = 0; i < arr[0].length; i++) {
+                            if (arr[j][i] < smallestNumber) {
+                                smallestNumber = arr[j][i];
+                            }
+                        }
+                    }
+                    for (let j = 0; j < arr.length; j++) {            
+                        for (let i = 0; i < arr[0].length; i++) {
+                            if (arr[j][i] % 2 !== 0) {
+                                arr[j][i] = arr[j][i] * smallestNumber;
+                            }
+                        }
+                    
+                    }
+                    return arr;
+                }
+
+//5
+        var arr = [['name', 'developer'], ['age', 5], ['skills', [['html',4], ['css', 5], ['js',5]]]];
+
+                
+        function arrayToObject(items) {
+            const flat = {};
+            items.forEach(item => {
+            if (Array.isArray(item)) {
+                Array.isArray(item[1]) ? flat[item[0]] = arrayToObject(item[1]) : flat[item[0]] = item[1];
+        }});
+        return flat;
+        }
+
+      
+
+
+//6
+        function toDataURL(src, callback, outputFormat) {
+            var img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onload = function() {
+                var canvas = document.createElement('CANVAS');
+                var ctx = canvas.getContext('2d');
+                var dataURL;
+                canvas.height = this.naturalHeight;
+                canvas.width = this.naturalWidth;
+                ctx.drawImage(this, 0, 0);
+                dataURL = canvas.toDataURL(outputFormat);
+                callback(dataURL);
+            };
+            img.src = src;
+            if (img.complete || img.complete === undefined) {
+                img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+                img.src = src;
+            }
+            }
+
+        toDataURL('https://lh3.googleusercontent.com/i7cTyGnCwLIJhT1t2YpLW-zHt8ZKalgQiqfrYnZQl975-ygD_0mOXaYZMzekfKW_ydHRutDbNzeqpWoLkFR4Yx2Z2bgNj2XskKJrfw8', function(dataUrl) {console.log('RESULT:', dataUrl)})
+
+
+
+//7
+        obj =  {name: 'developer', age: 5, skills: {css: 5, html: 4, js: 5}};
+
+
+        const objectToArray = (obj) => {  
+            console.log(Object.entries(obj));
+        }
+
+        const ArrayFromObject = (arr) => {
+            console.log(Object.fromEntries(arr));
+        }
+
+
+
+//8
+
+        const div = document.createElement('div')
+        const p = document.createElement('p')
+        const span = document.createElement('span')
+        p.appendChild(span)
+        div.appendChild(p)
+        const nodeChildCount = (element, deep) => {
+            let i;
+            deep === undefined ?  i = element.getElementsByTagName("*").length : (deep <= element.getElementsByTagName("*").length ? i = deep : i = element.getElementsByTagName("*").length);
+            return i;
+      
+        }
+        //console.log(nodeChildCount(div));
+
+
+
+
+
+   
+
+//9
+        const removeDuplicates = (a) => {
+            let x = "Int32 Int32 Int32 Int32 Int32 Int32 Int32 Int32 Int32 Double Double Double";
+            result = a.split(' ');
+            const uniqueSet = new Set(result);
+            return [...uniqueSet];
+            
+
+        }
+
+
+
+
+
+    
+//10
+        const reliableMultiply = (a, b) => {           
+            try {
+                return primitiveMultiply(a, b);
+            } catch (error) {
+                if(error.constructor.name === 'NotificationException'){                   
+                    return reliableMultiply(a, b);
+                } else {
+                    return;
+                }
+            }
+        }
+
+        function NotificationException() {}
+        function ErrorException() {}
+        function primitiveMultiply(a, b) {
+        const rand = Math.random();
+        if (rand < 0.5) {
+            return a * b;
+        } else if(rand > 0.85) {
+            throw new ErrorException()
+        } else {
+            throw new NotificationException()
+        }
+        }
+
+        //console.log(reliableMultiply(8, 8));
+    </script>
+</body>
+</html>
